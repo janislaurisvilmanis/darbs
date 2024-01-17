@@ -11,11 +11,14 @@ service = Service()
 option = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=service, options=option)
 
+auto = str(input("Ievadiet automobila marku: "))
+modelis = str(input("Ievadiet automobila modeli: "))
+
 url = "https://www.ss.com/lv/transport/cars/"
 driver.get(url)
 time.sleep(2)
 
-find = driver.find_element(By.LINK_TEXT, "Mercedes")
+find = driver.find_element(By.LINK_TEXT, auto)
 find.click()
 time.sleep(2)
 
@@ -25,7 +28,7 @@ time.sleep(2)
 
 find = driver.find_element(By.ID, "ptxt")
 find.clear()
-find.send_keys("Cls")
+find.send_keys(modelis)
 time.sleep(3)
 find.send_keys(Keys.RETURN)
 
