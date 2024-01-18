@@ -32,82 +32,44 @@ find.send_keys(modelis)
 time.sleep(3)
 find.send_keys(Keys.RETURN)
 
-price_list = []
+cena_list = []
 tilp_list = []
 nobr_list = []
 gad_list = []
 mod_list = []
 
-o = 4
-i = 0
-while i <= 34:
-    x = driver.find_elements(By.CLASS_NAME, "amopt")
+kollonas = {
+    'cena' : 4,
+    'tilp' : 3,
+    'nobr' : 2,
+    'gad' : 1,
+    'mod' : 0,
+}
 
-    if o >= len(x):
-        break
+for column, offset in kollonas.items():
+    i = 0
+    while i <=34:
+        x = driver.find_elements(By.CLASS_NAME, 'amopt')
 
-    cena = x[o]
-    car_price = cena.text
-    price_list.append(car_price)
-    o = o + 5
-    i += 1
+        if offset >= len(x):
+            break
 
-o = 3
-i = 0
-while i <= 34:
-    x = driver.find_elements(By.CLASS_NAME, "amopt")
+        element = x[offset]
+        text_vert = element.text
 
-    if o >= len(x):
-        break
+        if column == 'cena':
+            text_vert = text_vert.replace('€', '').replace(',','.').replace('/n','').replace('maiņai','').replace('maiņa','')
+            vert = float(text_vert)
+        else:
+            vert = text_vert
+        globals()[f'{column}_list'].append(vert)
 
-    nobr = x[o]
-    nobr_text = nobr.text
-    nobr_list.append(nobr_text)
-    o = o + 5
-    i += 1
+        offset += 5
+        i += 1
 
-o = 2
-i = 0
-while i <= 34:
-    x = driver.find_elements(By.CLASS_NAME, "amopt")
-
-    if o >= len(x):
-        break
-
-    tilp = x[o]
-    tilp_text = tilp.text
-    tilp_list.append(tilp_text)
-    o = o + 5
-    i += 1
-
-o = 1
-i = 0
-while i <= 34:
-    x = driver.find_elements(By.CLASS_NAME, "amopt")
-
-    if o >= len(x):
-        break
-
-    gads = x[o]
-    gads_text = gads.text
-    gad_list.append(gads_text)
-    o = o + 5
-    i += 1
-
-o = 0
-i = 0
-while i <= 34:
-    x = driver.find_elements(By.CLASS_NAME, "amopt")
-
-    if o >= len(x):
-        break
-
-    mod = x[o]
-    mod_text = mod.text
-    mod_list.append(mod_text)
-    o = o + 5
-    i += 1
-
-print(price_list)
-
+print(cena_list)
+print(nobr_list)
+print(tilp_list)
+print(gad_list)
+print(mod_list)
 input()
