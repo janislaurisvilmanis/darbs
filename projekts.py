@@ -7,6 +7,12 @@ import time
 import openpyxl
 from openpyxl import Workbook, load_workbook
 
+wb_test = Workbook()
+wb_test.save('carx.xlsx')
+ws = wb_test.active
+
+ws = wb_test.create_sheet('Sheet1')
+
 service = Service()
 option = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=service, options=option)
@@ -58,7 +64,7 @@ for column, offset in kollonas.items():
         text_vert = element.text
 
         if column == 'cena':
-            text_vert = text_vert.replace('€', '').replace(',','.').replace('/n','').replace('maiņai','').replace('maiņa','')
+            text_vert = text_vert.replace('€', '').replace(',','.').replace('/n','').replace('maiņai','').replace('maiņa','').replace('pērku','')
             vert = float(text_vert)
         else:
             vert = text_vert
@@ -72,8 +78,18 @@ print(nobr_list)
 print(tilp_list)
 print(gad_list)
 print(mod_list)
+
+valid_price = [price for price in cena_list if price is not None]
+average_price = sum(valid_price) / len(valid_price) if valid_price else 0
+
+print('\nPiedavajumi zem videjas tirgus cenas: ')
+for i, price in enumerate(cena_list):
+    if price is not None and price < average_price:
+        print(f"{nobr_list[i]}, {mod_list[i]}, {gad_list[i]}, {tilp_list[i]}, {price} tūkst.€")
+        ws.append((nobr_list[i], mod_list[i], gad_list[i], tilp_list[i], cena_list[i]))
+        
+wb_test.save('carx.xlsx')
+wb_test.close
+
+driver.quit()
 input()
-
-
-
-#test1
